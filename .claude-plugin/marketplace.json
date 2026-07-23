@@ -1,14 +1,16 @@
 {
   "name": "notebooks-agent-skills",
-  "version": "1.0.0",
-  "description": "Agent Skills for OpenDataHub/RHOAI Notebooks - CVE resolution, dependency management, and development workflows",
-  "author": "opendatahub-io",
-  "homepage": "https://github.com/opendatahub-io/notebooks-agent-skills",
+  "description": "Agent Skills for OpenDataHub/RHOAI Notebooks - CVE resolution, dependency management, and development workflows for Red Hat AI platform",
+  "owner": {
+    "name": "OpenDataHub",
+    "url": "https://github.com/opendatahub-io"
+  },
   "plugins": [
     {
       "name": "cve-resolution",
-      "description": "Complete CVE resolution workflow - from Jira triage to PR creation",
-      "path": "plugins/cve-resolution"
+      "description": "Complete CVE resolution workflow - autonomous Jira triage, dependency fixes, PR creation, and team updates",
+      "source": "./",
+      "version": "1.0.0"
     }
   ]
 }

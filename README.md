@@ -1,160 +1,91 @@
-# Notebooks Agent Skills Marketplace
+# Notebooks Agent Skills
 
-[![Agent Skills compatible](https://img.shields.io/badge/spec-agentskills.io-7dd3fc)](https://agentskills.io/specification)
-[![Claude Code marketplace](https://img.shields.io/badge/Claude_Code-marketplace-a78bfa)](https://docs.claude.com/en/docs/claude-code/plugin-marketplaces)
+Agent Skills for OpenDataHub/RHOAI Notebooks - CVE resolution, dependency management, and development workflows.
 
-Agent Skills for **OpenDataHub/RHOAI Notebooks** — CVE resolution, dependency management, and development workflows.
-
-## Quick Start
+## Installation
 
 ### Claude Code CLI
 
 ```bash
 # Add this marketplace
-/plugin marketplace add opendatahub-io/notebooks-agent-skills
+/plugin marketplace add ayush17/notebooks-agent-skills
 
-# Install CVE resolution plugin
-/plugin install cve-resolution@notebooks-agent-skills
-
-# Use the skill
-/fix-cve
-```
-
-### Cursor IDE
-
-```bash
-# Install via plugin manager
-/plugin marketplace add opendatahub-io/notebooks-agent-skills
+# Install the CVE resolution plugin
 /plugin install cve-resolution@notebooks-agent-skills
 ```
 
-### Manual Installation (Any Agent)
-
-Copy the skill files to your agent's skills directory:
+### Manual Installation
 
 ```bash
-# Clone and copy to personal skills folder
-git clone https://github.com/opendatahub-io/notebooks-agent-skills
-cp -r notebooks-agent-skills/plugins/cve-resolution/skills/cve-resolution ~/.claude/skills/
+# Clone and use directly
+git clone https://github.com/ayush17/notebooks-agent-skills.git
+cd your-project
+claude --plugin-dir /path/to/notebooks-agent-skills
 ```
 
 ## Available Plugins
 
 ### CVE Resolution (`cve-resolution`)
 
-Complete CVE resolution workflow for RHAIENG tickets:
+Complete CVE resolution workflow for OpenDataHub/RHOAI Notebooks:
+- Autonomous Jira ticket triage and assignment
+- CVE research and fix identification
+- Dependency constraint updates
+- PR creation to downstream branches
+- Jira comments and status updates
+- Team Slack notifications
 
-- **Autonomous execution** — No confirmation prompts
-- **Multi-branch support** — Works on any rhoai-X.Y branch
-- **Jira integration** — Search, assign, comment via MCP
-- **PR automation** — Creates PRs with proper formatting
-- **Slack summaries** — Generates team update messages
+#### Usage
 
-**Commands:**
-| Command | Description |
-|---------|-------------|
-| `/fix-cve` | Full workflow - assign and fix CVEs |
-| `/fix-cve plan` | Sprint planning - same as above |
-| `/fix-cve <TICKET>` | Fix specific RHAIENG ticket |
-| `/fix-cve status` | Show assigned CVE status |
+```bash
+# In Claude Code CLI
+/fix-cve              # Full workflow - assign AND fix CVEs
+/fix-cve status       # Check status of assigned CVEs
+/fix-cve RHAIENG-1234 # Fix a specific ticket
+```
 
-**Prerequisites:**
-- Atlassian MCP configured for Jira access
-- GitHub CLI (`gh`) authenticated
-- Write access to notebooks repository
+#### Requirements
 
-## Supported Platforms
+- **MCP**: Atlassian (Jira) - for ticket management
+- **Tools**: `git`, `gh` (GitHub CLI), `make`
+- **Access**: Write access to `red-hat-data-services/notebooks` repository
 
-These skills follow the open [Agent Skills specification](https://agentskills.io) and work with:
+## Plugin Structure
 
-- **Claude Code** (Anthropic)
-- **Cursor IDE**
-- **GitHub Copilot**
-- **Gemini CLI**
-- **OpenCode, Goose, Amp, Roo Code** and [30+ more](https://agentskills.io/clients)
-
-## MCP Requirements
-
-The CVE resolution skill requires the **Atlassian MCP** for Jira integration.
-
-### Official Atlassian MCP (Recommended)
-
-Uses OAuth authentication — no API token needed:
-
-1. Go to [Cursor Settings] > [MCP] > [Add Server]
-2. Add: `https://mcp.atlassian.com/v1/mcp`
-3. Authenticate via browser when prompted
-
-### Alternative: NPM Package
-
-```json
-{
-  "mcpServers": {
-    "atlassian": {
-      "command": "npx",
-      "args": ["-y", "mcp-atlassian"],
-      "env": {
-        "ATLASSIAN_SITE_URL": "https://redhat.atlassian.net",
-        "ATLASSIAN_EMAIL": "your-email@redhat.com",
-        "ATLASSIAN_API_TOKEN": "your-api-token"
-      }
-    }
-  }
-}
+```
+notebooks-agent-skills/
+├── .claude-plugin/
+│   ├── plugin.json       # Plugin manifest
+│   └── marketplace.json  # Marketplace catalog
+├── skills/
+│   └── cve-resolution/
+│       └── SKILL.md      # CVE resolution skill definition
+├── commands/
+│   └── fix-cve.md        # /fix-cve command definition
+├── LICENSE
+└── README.md
 ```
 
 ## Contributing
 
-### Adding a New Skill
+1. Fork this repository
+2. Create a feature branch
+3. Make your changes
+4. Run `claude plugin validate .` to verify
+5. Submit a pull request
 
-1. Create a new plugin directory:
+## Publishing to Claude Community Marketplace
+
+This plugin can be submitted to Claude's official community marketplace:
+
+1. Validate: `claude plugin validate .`
+2. Submit at: https://platform.claude.com/plugins/submit
+3. After approval, users can install via:
    ```
-   plugins/your-skill/
-   ├── .claude-plugin/
-   │   └── plugin.json
-   ├── skills/
-   │   └── your-skill/
-   │       └── SKILL.md
-   └── commands/
-       └── your-command.md
+   /plugin marketplace add anthropics/claude-plugins-community
+   /plugin install cve-resolution@claude-community
    ```
-
-2. Add to `.claude-plugin/marketplace.json`
-
-3. Submit a PR
-
-### Skill Specification
-
-Skills must follow the [Agent Skills specification](https://agentskills.io/specification):
-
-- `SKILL.md` with YAML frontmatter (`name`, `description`)
-- Optional `commands/`, `scripts/`, `references/` directories
-- Use Markdown for instructions
-
-## Repository Structure
-
-```
-.
-├── .claude-plugin/
-│   └── marketplace.json       # Plugin catalog
-├── plugins/
-│   └── cve-resolution/
-│       ├── .claude-plugin/
-│       │   └── plugin.json    # Plugin manifest
-│       ├── skills/
-│       │   └── cve-resolution/
-│       │       └── SKILL.md   # Skill definition
-│       └── commands/
-│           └── fix-cve.md     # Command definition
-└── README.md
-```
-
-## Related Projects
-
-- [opendatahub-io/notebooks](https://github.com/opendatahub-io/notebooks) — Main notebooks repository
-- [red-hat-data-services/notebooks](https://github.com/red-hat-data-services/notebooks) — Downstream RHOAI repository
-- [agentskills.io](https://agentskills.io) — Agent Skills specification
 
 ## License
 
-MIT License — see [LICENSE](LICENSE)
+MIT License - see [LICENSE](LICENSE)
