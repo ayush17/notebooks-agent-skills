@@ -193,7 +193,9 @@ Extract the target branch from the ticket title suffix (e.g., `[rhoai-2.25]` →
    ```
    Then run `make refresh-lock-files`.
 
-7. **If fix fails:** Log reason, continue to next CVE
+7. **If fix fails:** Log reason, continue to next CVE.
+   If the fixed version is missing from the frozen RHOAI index, log that and
+   follow **AIPCC package requests** below when the user asks to request AIPCC.
 
 8. **Commit** (just do it):
    ```bash
@@ -287,3 +289,36 @@ When a CVE cannot be fixed, **log the research**:
 - **Result:** Why it failed
 - **Recommendation:** Manual steps needed
 ```
+
+---
+
+## AIPCC package requests
+
+When asked to request AIPCC to onboard a new package, fill out and submit the
+[AIPCC package request form](https://team-tracker.apps.int.spoke.prod.us-west-2.aws.paas.redhat.com/#/product-builds/package-request).
+Use the request details provided by the user; ask for any required information
+that is missing before submitting.
+
+For a package update in a frozen RHOAI index, follow
+[Updating Packages in Frozen Wheel Indexes](https://docs.aipcc.redhat.com/ecosystems/policy-updating-packages-in-frozen-indexes/).
+
+Use this exact workflow:
+
+1. Create the RHAI Jira request in the `RHAI` project, not `RHAIENG`.
+2. Create the fondue merge request in `redhat/rhel-ai/wheels/fondue`.
+3. Do **not** use the historical `redhat/rhel-ai/rhai/pipeline` repository for
+   frozen-index updates.
+4. Link the Jira request and fondue merge request to each other.
+5. Use the GitLab API, not the browser.
+6. Run the applicable fondue linter before pushing or opening the merge request.
+7. If the policy requires a Slack notification, draft the Slack message and say
+   which channel to send it to. Use the Slack MCP/API connection configured for
+   this workspace for **read only**. Do **not** send Slack messages automatically.
+
+**Exception to “NEVER Ask Questions”:** for this AIPCC request path only, ask
+for missing required form fields before submitting. Do not invent package,
+index, version, CVE, or justification details.
+
+When a CVE fix fails because the fixed version is absent from the frozen RHOAI
+index, log that as the failure reason and surface an AIPCC request as the next
+step (do not silently skip).
